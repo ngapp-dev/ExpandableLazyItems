@@ -1,11 +1,17 @@
 package com.ngapps.expandablelazyitems
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
@@ -46,7 +52,7 @@ fun HomeScreen(
         state = state,
     ) {
         playersByCategory.forEach { (category, players) ->
-            item(span = { GridItemSpan(maxLineSpan) }) {
+            item(key = category, span = { GridItemSpan(maxLineSpan) }) {
                 PlayerCategoryCard(
                     category = category,
                     onExpandClick = {
@@ -56,16 +62,22 @@ fun HomeScreen(
                             expandedState += category
                         }
                     },
+                    modifier = Modifier.fillMaxWidth(),
                 )
             }
-            items(
-                items = players,
-                key = { it.id }
-            ) { player ->
-                if (expandedState.contains(category)) {
+            items(items = players, key = { it.id }) { player ->
+                AnimatedVisibility(
+                    visible = expandedState.contains(category),
+                    enter = fadeIn() + expandVertically(),
+                    exit = fadeOut() + shrinkVertically(),
+                ) {
                     PlayerResourceCard(
-                        player = player,
-                        modifier = Modifier.padding(vertical = 6.dp),
+                        name = player.name,
+                        team = player.team,
+                        position = player.position,
+                        modifier = Modifier
+                            .padding(vertical = 6.dp)
+                            .fillMaxWidth(),
                     )
                 }
             }

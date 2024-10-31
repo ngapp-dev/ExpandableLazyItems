@@ -27,17 +27,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ngapps.expandablelazyitems.model.Player
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlayerCategoryCard(
     category: String,
-    onExpandClick: () -> Unit
+    onExpandClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Card(
         onClick = onExpandClick,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
+        modifier = modifier.padding(8.dp),
         shape = RoundedCornerShape(4.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primary,
@@ -68,12 +66,13 @@ fun PlayerCategoryCard(
 
 @Composable
 fun PlayerResourceCard(
-    player: Player,
+    name: String,
+    team: String,
+    position: String,
     modifier: Modifier = Modifier
 ) {
     Card(
         modifier = modifier
-            .fillMaxWidth()
             .height(120.dp)
             .padding(8.dp),
         shape = RoundedCornerShape(4.dp),
@@ -89,13 +88,13 @@ fun PlayerResourceCard(
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = player.name,
+                text = name,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "${player.team}, ${player.position}",
+                text = "$team, $position",
                 fontSize = 14.sp,
             )
         }
